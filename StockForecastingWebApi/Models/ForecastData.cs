@@ -2,10 +2,10 @@
 {
     public class ForecastData
     {
-        public float[] ForecastedRentals { get; set; }
+        public float[] ForecastedPrices { get; set; }
 
-        public float[] LowerBoundRentals { get; set; }
+        public float[] LowerBoundPrices { get; set; }
 
-        public float[] UpperBoundRentals { get; set; }
+        public float[] UpperBoundPrices { get; set; }
     }
 }

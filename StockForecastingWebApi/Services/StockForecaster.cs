@@ -12,15 +12,15 @@ namespace StockForecastingWebApi.Services
             var dataView = mlContext.Data.LoadFromEnumerable(historicData);
 
             var forecastingPipline = mlContext.Forecasting.ForecastBySsa(
-                outputColumnName: "ForecastedRentals",
+                outputColumnName: "ForecastedPrices",
                 inputColumnName: "ClosingPrice",
                 windowSize: 7,
                 seriesLength: 30,
                 trainSize: historicData.Count,
                 horizon: 100,
                 confidenceLevel: 0.95f,
-                confidenceLowerBoundColumn: "LowerBoundRentals",
-                confidenceUpperBoundColumn: "UpperBoundRentals");
+                confidenceLowerBoundColumn: "LowerBoundPrices",
+                confidenceUpperBoundColumn: "UpperBoundPrices");
 
             var forecaster = forecastingPipline.Fit(dataView);
             var forecastingEngine = forecaster.CreateTimeSeriesEngine<Stock, ForecastData>(mlContext);
