@@ -5,7 +5,7 @@ namespace StockForecastingWebApi.Services
 {
     public static class DataFetcher
     {
-        public static async Task<IEnumerable<Stock>> GetHistoricalData(string symbol)
+        public static async Task<List<Stock>> GetHistoricalData(string symbol)
         {
             var stockData = new List<Stock>();
             try
