@@ -2,13 +2,13 @@
 {
     public class StockModel
     {
-        public StockModel(DateTime stockDate, int closingPrice)
+        public StockModel(DateTime stockDate, decimal closingPrice)
         {
             StockDate=stockDate;
             ClosingPrice=closingPrice;
         }
 
         public DateTime StockDate { get; set; }
-        public int ClosingPrice { get; set; }
+        public decimal ClosingPrice { get; set; }
     }
 }
