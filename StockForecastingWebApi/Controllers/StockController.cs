@@ -10,7 +10,7 @@ namespace StockForecastingWebApi.Controllers
     public class StockController : ControllerBase
     {
         [HttpGet("{symbol}")]
-        public async Task<ActionResult<IEnumerable<Stock>>> Get(string symbol)
+        public async Task<ActionResult<ForecastData>> Get(string symbol)
         {
             symbol = symbol.ToUpper();
             try
