@@ -10,7 +10,7 @@ namespace StockForecastingWebApi.Services
             var stockData = new List<StockModel>();
             try
             {
-                var historicalData = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2015, 1, 1), DateTime.Now, Period.Daily);
+                var historicalData = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2021, 1, 1), DateTime.Now, Period.Daily);
                 foreach(var item in historicalData)
                 {
                     stockData.Add(new StockModel(item.DateTime, item.Close));
