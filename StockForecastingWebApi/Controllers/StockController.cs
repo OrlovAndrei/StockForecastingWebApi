@@ -17,7 +17,7 @@ namespace StockForecastingWebApi.Controllers
             {
                 var historicData = await DataFetcher.GetHistoricalData(symbol);
                 var forecast = StockForecaster.Forecast(historicData);
-                return historicData == null ? NotFound() : Ok(historicData);
+                return historicData == null ? NotFound() : Ok(forecast);
             }
             catch (Exception)
             {
