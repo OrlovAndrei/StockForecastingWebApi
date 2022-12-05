@@ -1,8 +1,8 @@
 ﻿namespace StockForecastingWebApi.Models
 {
-    public class StockModel
+    public class Stock
     {
-        public StockModel(DateTime stockDate, decimal closingPrice)
+        public Stock(DateTime stockDate, decimal closingPrice)
         {
             StockDate=stockDate;
             ClosingPrice=closingPrice;

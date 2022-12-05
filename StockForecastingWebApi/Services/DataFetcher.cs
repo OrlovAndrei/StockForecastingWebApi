@@ -5,15 +5,15 @@ namespace StockForecastingWebApi.Services
 {
     public static class DataFetcher
     {
-        public static async Task<IEnumerable<StockModel>> GetHistoricalData(string symbol)
+        public static async Task<IEnumerable<Stock>> GetHistoricalData(string symbol)
         {
-            var stockData = new List<StockModel>();
+            var stockData = new List<Stock>();
             try
             {
                 var historicalData = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2021, 1, 1), DateTime.Now, Period.Daily);
                 foreach(var item in historicalData)
                 {
-                    stockData.Add(new StockModel(item.DateTime, item.Close));
+                    stockData.Add(new Stock(item.DateTime, item.Close));
                 }
                 return stockData;
             }
