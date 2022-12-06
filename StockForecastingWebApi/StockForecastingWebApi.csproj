@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Reference Include="YahooFinanceApi">
-      <HintPath>..\..\..\YahooFinanceApi.dll</HintPath>
+      <HintPath>bin\Debug\net6.0\YahooFinanceApi.dll</HintPath>
     </Reference>
   </ItemGroup>
 
