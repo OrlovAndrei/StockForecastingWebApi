@@ -1,33 +1,65 @@
-var builder = WebApplication.CreateBuilder(args);
-var AllowSpecificOrigins = "_AllowSpecificOrigins";
+using StockForecastingWebApi.Services;
+using System.Reflection;
 
-builder.Services.AddCors(options =>
+namespace StockForecastingWebApi
 {
-    options.AddPolicy(name: AllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:3000");
-                      });
-});
+    public class Program
+    {
+        public static Dictionary<string, IForecaster> Forecasters { get; set; }
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+        public static void Main(string[] args)
+        {
+            Forecasters = GetForecasters();
 
-var app = builder.Build();
+            var builder = WebApplication.CreateBuilder(args);
+            var AllowSpecificOrigins = "_AllowSpecificOrigins";
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:3000");
+                                  });
+            });
+
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseCors(AllowSpecificOrigins);
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.Run();
+
+        }
+
+        private static Dictionary<string, IForecaster> GetForecasters()
+        {
+            return Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(a => a.GetConstructor(Type.EmptyTypes) != null)
+                .Select(Activator.CreateInstance)
+                .OfType<IForecaster>()
+                .ToDictionary(x => x
+                    .GetType()
+                    .GetCustomAttribute<ForecasterAttribute>()
+                    .Name);
+        }
+    }
 }
 
-app.UseHttpsRedirection();
-
-app.UseCors(AllowSpecificOrigins);
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
