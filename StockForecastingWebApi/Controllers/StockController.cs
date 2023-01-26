@@ -9,14 +9,14 @@ namespace StockForecastingWebApi.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
-        [HttpGet("{symbol}")]
-        public async Task<ActionResult<object>> Get(string symbol)
+        [HttpGet]
+        public async Task<ActionResult<object>> Get(string symbol, string method)
         {
             symbol = symbol.ToUpper();
             try
             {
                 var historicData = await DataFetcher.GetHistoricalData(symbol);
-                var forecast = StockForecaster.Forecast(historicData);
+                var forecast = Program.Forecasters[method].Forecast(historicData);
                 return historicData == null ? NotFound() : Ok(new {HistoricData=historicData, Forecast=forecast });
             }
             catch (Exception)
