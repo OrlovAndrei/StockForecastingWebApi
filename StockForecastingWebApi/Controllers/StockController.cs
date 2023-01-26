@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockForecastingWebApi.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using StockForecastingWebApi.Services;
 
 namespace StockForecastingWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class StockController : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<object>> Get(string symbol, string method)
+        public async Task<ActionResult<object>> GetForecast(string symbol, string method)
         {
             symbol = symbol.ToUpper();
             try
@@ -23,7 +21,20 @@ namespace StockForecastingWebApi.Controllers
             {
                 return BadRequest();
             }
+        }
 
+        [HttpGet]
+        public ActionResult<object> GetMethods()
+        {
+            try
+            {
+                var methods = Program.Forecasters.Keys.ToArray();
+                return methods == null ? NotFound() : Ok(methods);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }
