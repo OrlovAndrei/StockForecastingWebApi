@@ -47,7 +47,7 @@ namespace StockForecastingWebApi
 
         }
 
-        private static Dictionary<string, IForecaster> GetForecasters()
+        public static Dictionary<string, IForecaster> GetForecasters()
         {
             return Assembly
                 .GetExecutingAssembly()
