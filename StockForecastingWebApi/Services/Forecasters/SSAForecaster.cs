@@ -4,9 +4,10 @@ using StockForecastingWebApi.Models;
 
 namespace StockForecastingWebApi.Services
 {
-    public static class StockForecaster
+    [Forecaster("ssa")]
+    public class SSAForecaster : IForecaster
     {
-        public static ForecastData Forecast(List<Stock> historicData)
+        public ForecastData Forecast(List<Stock> historicData)
         {
             var mlContext = new MLContext();
             var dataView = mlContext.Data.LoadFromEnumerable(historicData);
