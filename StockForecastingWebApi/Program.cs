@@ -5,12 +5,10 @@ namespace StockForecastingWebApi
 {
     public class Program
     {
-        public static Dictionary<string, IForecaster> Forecasters { get; set; }
+        public static Dictionary<string, IForecaster> Forecasters { get => GetForecasters(); }
 
         public static void Main(string[] args)
         {
-            Forecasters = GetForecasters();
-
             var builder = WebApplication.CreateBuilder(args);
             var AllowSpecificOrigins = "_AllowSpecificOrigins";
 
