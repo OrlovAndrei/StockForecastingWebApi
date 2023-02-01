@@ -3,9 +3,9 @@ using YahooFinanceApi;
 
 namespace StockForecastingWebApi.Services
 {
-    public static class DataFetcher
+    public class YahooDataFetcher : IDataFetcher
     {
-        public static async Task<List<Stock>> GetHistoricalData(string symbol)
+        public async Task<List<Stock>> GetHistoricalData(string symbol)
         {
             var stockData = new List<Stock>();
             try

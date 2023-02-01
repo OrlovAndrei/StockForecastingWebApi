@@ -5,8 +5,6 @@ namespace StockForecastingWebApi
 {
     public class Program
     {
-        public static Dictionary<string, IForecaster> Forecasters { get => GetForecasters(); }
-
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +22,8 @@ namespace StockForecastingWebApi
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddTransient<IDataFetcher, YahooDataFetcher>();
+            builder.Services.AddTransient<IForecasterProvider, ForecasterProvider>();
 
             var app = builder.Build();
 
@@ -43,20 +43,6 @@ namespace StockForecastingWebApi
 
             app.Run();
 
-        }
-
-        public static Dictionary<string, IForecaster> GetForecasters()
-        {
-            return Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(a => a.GetConstructor(Type.EmptyTypes) != null)
-                .Select(Activator.CreateInstance)
-                .OfType<IForecaster>()
-                .ToDictionary(x => x
-                    .GetType()
-                    .GetCustomAttribute<ForecasterAttribute>()
-                    .Name);
         }
     }
 }

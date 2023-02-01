@@ -7,14 +7,23 @@ namespace StockForecastingWebApi.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
+        IForecasterProvider _forecastService;
+        IDataFetcher _dataFetcher;
+
+        public StockController(IForecasterProvider forecastService, IDataFetcher dataFetcher)
+        {
+            _forecastService = forecastService;
+            _dataFetcher = dataFetcher;
+        }
+
         [HttpGet]
         public async Task<ActionResult<object>> GetForecast(string symbol, string method)
         {
             symbol = symbol.ToUpper();
             try
             {
-                var historicData = await DataFetcher.GetHistoricalData(symbol);
-                var forecast = Program.Forecasters[method].Forecast(historicData);
+                var historicData = await _dataFetcher.GetHistoricalData(symbol);
+                var forecast = _forecastService.Forecasters[method].Forecast(historicData);
                 return historicData == null ? NotFound() : Ok(new {HistoricData=historicData, Forecast=forecast });
             }
             catch (Exception)
@@ -28,7 +37,7 @@ namespace StockForecastingWebApi.Controllers
         {
             try
             {
-                var methods = Program.Forecasters.Keys.ToArray();
+                var methods = _forecastService.Forecasters.Keys.ToArray();
                 return methods == null ? NotFound() : Ok(methods);
             }
             catch (Exception)
