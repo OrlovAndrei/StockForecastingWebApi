@@ -1,26 +1,30 @@
 using StockForecastingWebApi.Services;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
 namespace StockForecastingWebApi.Tests
 {
-    public class ProgramTests
+    public class ForecasterProviderTests
     {
-        [Fact]
-        public void GetForecastersTest()
+        [Theory]
+        [InlineData("ssa", typeof(SSAForecaster))]
+		[InlineData("C2", typeof(Class2))]
+		public void ForecastersContainClassTest(string name, Type forecasterClass)
         {
-            Dictionary<string, IForecaster> forecasters = Program.GetForecasters();
+            var provider = new ForecasterProvider();
+            Dictionary<string, IForecaster> forecasters = provider.Forecasters;
 
-            Assert.True(forecasters["C1"] is Class1);
-            Assert.True(forecasters["C2"] is Class2);
+            Assert.True(forecasters[name].GetType() == forecasterClass);
         }
 
         [Fact]
-        public void GetForecastersIntegrationTest()
+        public void ForecastersIsIForecasterTest()
         {
-            Dictionary<string, IForecaster> forecasters = Program.GetForecasters();
+			var provider = new ForecasterProvider();
+			Dictionary<string, IForecaster> forecasters = provider.Forecasters;
 
-            foreach(var forecaster in forecasters)
+			foreach (var forecaster in forecasters)
             {
                 Assert.True(forecaster.Value is IForecaster);
             }
