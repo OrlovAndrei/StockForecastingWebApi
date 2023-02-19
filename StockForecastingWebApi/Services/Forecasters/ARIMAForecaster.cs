@@ -7,13 +7,13 @@ namespace StockForecastingWebApi.Services
     {
         public ForecastData Forecast(List<Stock> historicData)
         {
-			var arimaParams = Fit(historicData);
-            return ARIMA(arimaParams.p, arimaParams.d, arimaParams.q, historicData);
+			var arimaModel = AutoArima(historicData);
+            return arimaModel(historicData);
         }
 
-        private (int p, int d, int q) Fit(List<Stock> historicData)
+        private Func<List<Stock>,ForecastData> AutoArima(List<Stock> historicData)
         {
-            return (0, 0, 0);
+            return data => ARIMA(0, 0, 0, data);
         }
 
         private ForecastData ARIMA(int p, int d, int q, List<Stock> historicData)
