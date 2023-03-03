@@ -22,7 +22,7 @@
 			return intSeries;
 		}
 
-		public static List<double> Arima(int p, int d, int q, List<double> series)
+		public static List<double> Arima(int p, int d, int q, List<double> series, int horizont)
 		{
 			var diffSeries = new List<double>();
 			series.ForEach(s => diffSeries.Add(s));
@@ -34,7 +34,7 @@
 				diffSeries = Differentiate(diffSeries);
 			}
 
-			var predictedSeries = Arma(p, q, diffSeries);
+			var predictedSeries = Arma(p, q, diffSeries, horizont);
 
 			for (int i = 0; i < d; i++)
 			{
@@ -45,7 +45,7 @@
 			return predictedSeries;
 		}
 
-		private static List<double> Arma(int p, int q, List<double> diffSeries)
+		private static List<double> Arma(int p, int q, List<double> diffSeries, int horizont)
 		{
 			throw new NotImplementedException();
 		}
