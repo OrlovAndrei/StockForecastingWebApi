@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Reflection;
 
 namespace TimeSeriesPrediction
 {
@@ -19,12 +18,15 @@ namespace TimeSeriesPrediction
 		{
 			var type = typeof(T);
 			var timeSeries = new List<Record>();
+
 			foreach (var item in series) 
 			{
 				var date = (DateTime)type.GetProperty(_datePropertyName).GetValue(item);
 				var value = (double)type.GetProperty(_valuePropertyName).GetValue(item);
 				timeSeries.Add(new Record(date, value));
 			}
+
+			timeSeries = timeSeries.OrderBy(s => s.Date).ToList();
 			return new TimeSeries(timeSeries, interval);
 		}
 	}
