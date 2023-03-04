@@ -1,10 +1,10 @@
 ﻿namespace TimeSeriesPrediction
 {
-	public class ArimaForecastingEstimator : ForecastingEstimator<ArimaForecastingModel>
+	public class ArimaForecastingEstimator : IForecastingEstimator<ArimaForecastingModel>
 	{
-		public override ArimaForecastingModel Fit(List<double> series)
+		public ArimaForecastingModel Fit(List<double> series)
 		{
-			throw new NotImplementedException();
+			return new ArimaForecastingModel(0, 0, 0);
 		}
 	}
 }

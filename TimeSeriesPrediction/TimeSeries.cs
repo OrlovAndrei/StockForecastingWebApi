@@ -1,53 +1,35 @@
-﻿namespace TimeSeriesPrediction
+﻿using System.Collections;
+
+namespace TimeSeriesPrediction
 {
-	public static class TimeSeries
+	public class TimeSeries : IEnumerable
 	{
-		public static List<double> Differentiate (List<double> series)
+		private readonly List<Record> _series;
+		private readonly TimeSpan _interval;
+
+		public TimeSeries(List<Record> series, TimeSpan interval) 
 		{
-			var diffSeries = new List<double>();
-			for (int i = 1; i < series.Count; i++)
-			{
-				diffSeries.Add(series[i] - series[i - 1]);
-			}
-			return diffSeries;
+			_series = series;
+			_interval = interval;
 		}
 
-		public static List<double> Integrate(double first, List<double> series)
+		public void Add(double value)
 		{
-			var intSeries = new List<double>() { first };
-			for (int i = 0; i < series.Count; i++)
-			{
-				intSeries.Add(intSeries[i] + series[i]);
-			}
-			return intSeries;
+			var lastDate = _series.Count != 0 ? _series[^1].Date : DateTime.Now;
+			_series.Add(new Record(lastDate + _interval, value));
 		}
 
-		public static List<double> Arima(int p, int d, int q, List<double> series, int horizont)
+		public double this[DateTime date]
 		{
-			var diffSeries = new List<double>();
-			series.ForEach(s => diffSeries.Add(s));
-			var remains = new Stack<double>();
+			get => _series.Find(s => s.Date == date).Value;
 
-			for (int i = 0; i < d; i++)
+			set
 			{
-				remains.Push(diffSeries[0]);
-				diffSeries = Differentiate(diffSeries);
+				var index = _series.IndexOf(_series.Find(s => s.Date == date));
+				_series[index] = new Record(date, value);
 			}
-
-			var predictedSeries = Arma(p, q, diffSeries, horizont);
-
-			for (int i = 0; i < d; i++)
-			{
-				var first = remains.Pop();
-				predictedSeries = Integrate(first, predictedSeries);
-			}
-
-			return predictedSeries;
 		}
 
-		private static List<double> Arma(int p, int q, List<double> diffSeries, int horizont)
-		{
-			throw new NotImplementedException();
-		}
+		public IEnumerator GetEnumerator() => _series.GetEnumerator();
 	}
 }

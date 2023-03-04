@@ -1,12 +1,21 @@
 ﻿namespace TimeSeriesPrediction
 {
-	public class ArimaForecastingModel : ForecastingModel<ArimaForecastingParameters>
+	public class ArimaForecastingModel : IForecastingModel
 	{
-		public ArimaForecastingModel(ArimaForecastingParameters parameters) : base(parameters) { }
+		public int P { get; set; }
+		public int D { get; set; }
+		public int Q { get; set; }
 
-		public override List<double> Predict(int horizont, List<double> series)
+		public ArimaForecastingModel(int p, int d, int q) 
 		{
-			return TimeSeries.Arima(Parameters.P, Parameters.D, Parameters.Q, series, horizont);
+			P = p;
+			D = d;
+			Q = q;
+		}
+
+		public List<double> Predict(int horizont, List<double> series)
+		{
+			return TimeSeriesProcessing.Arima(P, D, Q, series, horizont);
 		}
 	}
 }
