@@ -122,7 +122,7 @@ namespace TimeSeriesPrediction
 			return predictedSeries;
 		}
 
-		public static double RmsError(List<double> list1, List<double> list2)
+		public static double MseError(List<double> list1, List<double> list2)
 		{
 			var err = .0;
 
