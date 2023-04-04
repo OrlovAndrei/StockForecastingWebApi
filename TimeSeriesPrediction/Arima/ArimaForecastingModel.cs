@@ -15,7 +15,7 @@
 
 		public List<double> Predict(int horizont, List<double> series)
 		{
-			return TimeSeriesProcessing.Arima(P, D, Q, series, horizont);
+			return Forecasting.Arima(P, D, Q, series, horizont);
 		}
 	}
 }
