@@ -122,14 +122,19 @@ namespace TimeSeriesPrediction
 			return predictedSeries;
 		}
 
-		public static double MseError(List<double> list1, List<double> list2)
+		public static double Mse(List<double> list1, List<double> list2)
+		{
+			return Rss(list1, list2) / list1.Count;
+		}
+
+		public static double Rss(List<double> list1, List<double> list2)
 		{
 			var err = .0;
 
 			for (int i = 0; i < list1.Count; i++)
 				err += Math.Pow(list1[i] - list2[i], 2);
 
-			return err / list1.Count;
+			return err;
 		}
 
 		public static double[] Mls(List<double> series, int degree)
@@ -149,6 +154,11 @@ namespace TimeSeriesPrediction
 			var B = InvXTX.Multiply(XTY);
 
 			return B.ToArray();
-		}				
+		}
+
+		public static double Aic(double k, double mse, double n)
+		{
+			return 2 * k + n * Math.Log(mse);
+		}
 	}
 }
