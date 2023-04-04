@@ -83,7 +83,7 @@ namespace TimeSeriesPrediction
 			return predictedSeries;
 		}
 
-		public static List<double> ExponentialSmoothing(List<double> series, int n, int horizont)
+		public static List<double> Es(List<double> series, int n, int horizont)
 		{
 			var a = 2 / (1 + n);
 			var t = new List<double>();
