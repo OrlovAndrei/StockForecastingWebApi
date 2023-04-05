@@ -2,6 +2,6 @@
 {
 	public interface IForecastingModel 
 	{
-		List<double> Predict(int horizont, List<double> series);
+		TimeSeries Predict(int horizont, TimeSeries series);
 	}
 }

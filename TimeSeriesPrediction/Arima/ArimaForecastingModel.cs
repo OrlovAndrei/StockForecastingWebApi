@@ -13,9 +13,17 @@
 			Q = q;
 		}
 
-		public List<double> Predict(int horizont, List<double> series)
+		public TimeSeries Predict(int horizont, TimeSeries series)
 		{
-			return Forecasting.Arima(P, D, Q, series, horizont);
+			var predictedSeries = Forecasting.Arima(P, D, Q, series.GetValues(), horizont);
+
+			var forecast = new TimeSeries(series.LastDate + series.Interval, series.Interval);
+			var count = series.Count;
+
+			for (int i = count; i < count + horizont; i++)
+				forecast.Add(predictedSeries[i]);
+
+			return forecast;
 		}
 	}
 }

@@ -3,6 +3,6 @@
 	public interface IForecastingEstimator<T>
 		where T : IForecastingModel
 	{
-		public T Fit(List<double> series);
+		public T Fit(TimeSeries series);
 	}
 }

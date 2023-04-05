@@ -156,9 +156,14 @@ namespace TimeSeriesPrediction
 			return B.ToArray();
 		}
 
-		public static double Aic(double k, double mse, double n)
+		public static double Aic(double k, double rss, double n)
 		{
-			return 2 * k + n * Math.Log(mse);
+			return 2 * k + n * Math.Log(rss);
+		}
+
+		public static bool DickeyFullerTest(List<double> diffSeries)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
