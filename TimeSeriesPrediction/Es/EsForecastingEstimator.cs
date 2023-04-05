@@ -12,7 +12,7 @@
 				var values = series.GetValues();
 				var predictedSeries = Forecasting.Es(values, n, 0);
 				var rss = Forecasting.Rss(values, predictedSeries);
-				var aic = Forecasting.Aic(n, rss, values.Count());
+				var aic = Forecasting.Aic(n, rss, values.Count);
 
 				if (aic < minAic)
 					bestModel = new EsForecastingModel(n);

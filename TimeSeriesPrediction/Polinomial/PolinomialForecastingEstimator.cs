@@ -2,9 +2,24 @@
 {
 	public class PolinomialForecastingEstimator : IForecastingEstimator<PolinomialForecastingModel>
 	{
-		public PolinomialForecastingModel Fit(List<double> series)
+		public PolinomialForecastingModel Fit(TimeSeries series)
 		{
-			return new PolinomialForecastingModel(0, 0, 0);
+			var minAic = int.MaxValue;
+			PolinomialForecastingModel bestModel = null;
+
+			for (int n = 0; n < 10; n++)
+			{
+				var values = series.GetValues();
+				var parameters = Forecasting.Mls(series.GetValues(), n);
+				var predictedSeries = Forecasting.Polynomial(parameters, 0);
+				var rss = Forecasting.Rss(values, predictedSeries);
+				var aic = Forecasting.Aic(n, rss, values.Count);
+
+				if (aic < minAic)
+					bestModel = new PolinomialForecastingModel(parameters);
+			}
+
+			return bestModel;
 		}
 	}
 }
