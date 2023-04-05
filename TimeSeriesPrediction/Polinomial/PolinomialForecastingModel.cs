@@ -1,6 +1,6 @@
 ﻿namespace TimeSeriesPrediction
 {
-	public class PolinomialForecastingModel : IForecastingModel
+	public class PolinomialForecastingModel : ForecastingModel
 	{
 		public int P { get; set; }
 		public int D { get; set; }

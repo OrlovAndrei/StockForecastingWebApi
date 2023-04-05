@@ -1,7 +1,7 @@
 ﻿namespace TimeSeriesPrediction
 {
 	public interface IForecastingEstimator<T>
-		where T : IForecastingModel
+		where T : ForecastingModel
 	{
 		public T Fit(TimeSeries series);
 	}

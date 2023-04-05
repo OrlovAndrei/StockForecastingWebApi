@@ -1,21 +1,16 @@
 ﻿namespace TimeSeriesPrediction
 {
-	public class EsForecastingModel : IForecastingModel
+	public class EsForecastingModel : ForecastingModel
 	{
-		public int P { get; set; }
-		public int D { get; set; }
-		public int Q { get; set; }
+		public int N { get; set; }
 
-		public EsForecastingModel(int p, int d, int q) 
-		{
-			P = p;
-			D = d;
-			Q = q;
-		}
+		public EsForecastingModel(int n) => N = n;
 
-		public List<double> Predict(int horizont, List<double> series)
+		public override TimeSeries Predict(int horizont, TimeSeries series)
 		{
-			return Forecasting.Arima(P, D, Q, series, horizont);
+			var predictedSeries = Forecasting.Es(series.GetValues(), N, horizont);
+
+			return GetForecast(series, predictedSeries, horizont);
 		}
 	}
 }

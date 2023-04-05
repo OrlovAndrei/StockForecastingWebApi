@@ -4,6 +4,7 @@
 	{
 		public ArimaForecastingModel Fit(TimeSeries series)
 		{
+			//нужно учесть разницу между в длине прогнозных и реальных значениями
 			int d = 5;
 			var diffSeries = series.GetValues();
 			for (int i = 0; i < 5; i++)

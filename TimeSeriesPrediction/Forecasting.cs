@@ -85,6 +85,7 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Es(List<double> series, int n, int horizont)
 		{
+			//нужно добавить в прогноз прогнозные данные по прошлым значениям
 			var a = 2 / (1 + n);
 			var t = new List<double>();
 			var l = new List<double>();
@@ -107,6 +108,7 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Polynomial(double[] parameters, int horizont, int start = 0)
 		{
+			//нужно добавить в прогноз прогнозные данные по прошлым значениям
 			var predictedSeries = new List<double>();
 
 			for (int i = 0; i < horizont; i++)
