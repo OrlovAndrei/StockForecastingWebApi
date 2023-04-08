@@ -1,10 +1,13 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using MathNet.Numerics;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearRegression;
+using MathNet.Numerics.Statistics;
 
 namespace TimeSeriesPrediction
 {
 	public static class Forecasting
 	{
-		public static List<double> Differentiate (this List<double> series)
+		public static List<double> Differentiate(this List<double> series)
 		{
 			var diffSeries = new List<double>();
 
@@ -49,7 +52,7 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Arma(int p, int q, List<double> diffSeries, int horizont)
 		{
-			var a = 1 / (double) p;
+			var a = 1 / (double)p;
 			var b = 1 / (double)q;
 			var l = p > q ? p : q;
 			var predictedSeries = new List<double>();
@@ -60,13 +63,13 @@ namespace TimeSeriesPrediction
 				var ar = .0;
 				for (int j = 0; j < p; j++)
 				{
-					if(i - j < diffSeries.Count)
+					if (i - j < diffSeries.Count)
 						ar += a * diffSeries[i - j];
-					
+
 					else
 						ar += a * predictedSeries[^(1 + j)];
 				}
-					
+
 				var ma = .0;
 				for (int j = 0; j < q; j++)
 				{
@@ -140,7 +143,7 @@ namespace TimeSeriesPrediction
 		}
 
 		public static double[] Mls(List<double> series, int degree)
-		{				
+		{
 			var x = new double[series.Count, degree + 1];
 
 			for (int i = 0; i < series.Count; i++)
@@ -163,9 +166,30 @@ namespace TimeSeriesPrediction
 			return 2 * k + n * Math.Log(rss);
 		}
 
-		public static bool DickeyFullerTest(List<double> diffSeries)
+		public static bool DickeyFullerTest(List<double> series)
 		{
-			throw new NotImplementedException();
+			var n = series.Count;
+			//Находим первую разность
+			var diffSeries = Differentiate(series);
+
+			// Находим среднее и дисперсию первой разности
+			var mean = diffSeries.Average();
+			var variance = diffSeries.Variance();
+
+			// Рассчитываем тестовую статистику
+			var testStatistic = mean / Math.Sqrt(variance / (n - 1));
+
+			// Расчитываем критическое значение
+			double criticalValue;
+			if (n <= 100)
+					criticalValue = -2.89;
+			else
+					criticalValue = -3.43;
+
+			if (testStatistic < criticalValue)
+				return true; // Подтверждение нулевой гипотезы
+			else
+				return false; // опровержение нулевой гипотезы
 		}
 	}
 }
