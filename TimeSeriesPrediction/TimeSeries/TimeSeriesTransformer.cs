@@ -3,7 +3,6 @@
 namespace TimeSeriesPrediction
 {
 	public class TimeSeriesTransformer<T>
-		where T : IEnumerable
 	{
 		private readonly string _datePropertyName;
 		private readonly string _valuePropertyName;
@@ -14,7 +13,7 @@ namespace TimeSeriesPrediction
 			_valuePropertyName = valuePropertyName;
 		}
 
-		public TimeSeries TransformToTimeSeries(List<T> series, TimeSpan interval)
+		public TimeSeries ToTimeSeries(List<T> series, TimeSpan interval)
 		{
 			var type = typeof(T);
 			var timeSeries = new List<Record>();
@@ -28,6 +27,11 @@ namespace TimeSeriesPrediction
 
 			timeSeries = timeSeries.OrderBy(s => s.Date).ToList();
 			return new TimeSeries(timeSeries, interval);
+		}
+
+		public List<T> FromTimeSeries(TimeSeries series) 
+		{
+			return new List<T>();
 		}
 	}
 }

@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TimeSeriesPrediction\TimeSeriesPrediction.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="YahooFinanceApi">
       <HintPath>bin\Debug\net6.0\YahooFinanceApi.dll</HintPath>
     </Reference>

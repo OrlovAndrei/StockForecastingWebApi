@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockForecastingWebApi", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockForecastingWebApi.Tests", "StockForecastingWebApi.Tests\StockForecastingWebApi.Tests.csproj", "{D5EB93A6-5AF8-4DBC-A406-9D11883E0A4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSeriesPrediction", "TimeSeriesPrediction\TimeSeriesPrediction.csproj", "{185ADFCD-EFDE-4632-AB11-383FAAD860D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSeriesPrediction", "TimeSeriesPrediction\TimeSeriesPrediction.csproj", "{185ADFCD-EFDE-4632-AB11-383FAAD860D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

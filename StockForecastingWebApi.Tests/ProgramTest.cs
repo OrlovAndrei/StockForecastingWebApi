@@ -9,7 +9,7 @@ namespace StockForecastingWebApi.Tests
     {
         [Theory]
         [InlineData("ssa", typeof(SSAForecaster))]
-		[InlineData("arima", typeof(ARIMAForecaster))]
+		[InlineData("arima", typeof(ArimaForecaster))]
 		public void ForecastersContainClassTest(string name, Type forecasterClass)
         {
             var provider = new ForecasterProvider();
