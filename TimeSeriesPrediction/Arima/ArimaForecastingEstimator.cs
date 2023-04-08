@@ -4,7 +4,6 @@
 	{
 		public ArimaForecastingModel Fit(TimeSeries series)
 		{
-			//нужно учесть разницу между в длине прогнозных и реальных значениями
 			int d = 5;
 			var diffSeries = series.GetValues();
 			for (int i = 0; i < 5; i++)
@@ -25,10 +24,11 @@
 			{
 				for (int q = 0; q < 10; q++)
 				{
-					var values = series.GetValues();
-					var predictedSeries = Forecasting.Arima(p, d, q, values, 0);
-					var rss = Forecasting.Rss(values, predictedSeries);
-					var aic = Forecasting.Aic(p + d + q, rss, values.Count());
+					var l = p > q ? p : q;
+					var values = series.GetValues().ToArray();
+					var predictedSeries = Forecasting.Arima(p, d, q, values.ToList(), 0);
+					var rss = Forecasting.Rss(values[(l+d)..^1].ToList(), predictedSeries);
+					var aic = Forecasting.Aic(p + d + q, rss, values.Length);
 
 					if (aic < minAic)
 						bestModel = new ArimaForecastingModel(p, d, q);

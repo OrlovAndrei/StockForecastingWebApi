@@ -1,6 +1,4 @@
-﻿using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearRegression;
+﻿using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
 
 namespace TimeSeriesPrediction
@@ -29,15 +27,15 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Arima(int p, int d, int q, List<double> series, int horizont)
 		{
-			var diffSeries = new List<double>();
-			series.ForEach(s => diffSeries.Add(s));
+			var diffSeries = new List<double>(series);
 			var remains = new Stack<double>();
+			var l = p > q ? p : q;
 
 			for (int i = 0; i < d; i++)
-			{
-				remains.Push(diffSeries[0]);
 				diffSeries = Differentiate(diffSeries);
-			}
+
+			for (int i = l; i < l + d; i++)
+				remains.Push(series[i]);
 
 			var predictedSeries = Arma(p, q, diffSeries, horizont);
 
@@ -50,21 +48,22 @@ namespace TimeSeriesPrediction
 			return predictedSeries;
 		}
 
-		public static List<double> Arma(int p, int q, List<double> diffSeries, int horizont)
+		public static List<double> Arma(int p, int q, List<double> series, int horizont)
 		{
+			//коэффициенты расчитываются с помощью уравнения Юла — Уокера
 			var a = 1 / (double)p;
 			var b = 1 / (double)q;
+			//переделать!
 			var l = p > q ? p : q;
-			var predictedSeries = new List<double>();
-			predictedSeries.Add(diffSeries[l]);
+			var predictedSeries = new List<double> { series[l] };
 
-			for (int i = l; i < diffSeries.Count + horizont; i++)
+			for (int i = l; i < series.Count + horizont; i++)
 			{
 				var ar = .0;
 				for (int j = 0; j < p; j++)
 				{
-					if (i - j < diffSeries.Count)
-						ar += a * diffSeries[i - j];
+					if (i - j < series.Count)
+						ar += a * series[i - j];
 
 					else
 						ar += a * predictedSeries[^(1 + j)];
@@ -73,10 +72,10 @@ namespace TimeSeriesPrediction
 				var ma = .0;
 				for (int j = 0; j < q; j++)
 				{
-					if (i - j < diffSeries.Count || i - j >= l)
+					if (i - j < series.Count || i - j >= l)
 					{
-						var e = predictedSeries[^(1 + j)] - diffSeries[i - j];
-						ma += a * e;
+						var e = predictedSeries[^(1 + j)] - series[i - j];
+						ma += b * e;
 					}
 				}
 
@@ -88,7 +87,6 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Es(List<double> series, int n, int horizont)
 		{
-			//нужно добавить в прогноз прогнозные данные по прошлым значениям
 			var a = 2 / (1 + n);
 			var t = new List<double>();
 			var l = new List<double>();
@@ -101,7 +99,7 @@ namespace TimeSeriesPrediction
 				t.Add(a * (l[i] - l[i - 1]) + (1 - a) * t[i - 1]);
 			}
 
-			var predictedSeries = new List<double>();
+			var predictedSeries = new List<double>(l);
 
 			for (int j = 0; j < horizont; j++)
 				predictedSeries.Add(l[^1] + j * t[^1]);
@@ -109,17 +107,16 @@ namespace TimeSeriesPrediction
 			return predictedSeries;
 		}
 
-		public static List<double> Polynomial(double[] parameters, int horizont, int start = 0)
+		public static List<double> Polynomial(double[] parameters, int horizont, int length)
 		{
-			//нужно добавить в прогноз прогнозные данные по прошлым значениям
 			var predictedSeries = new List<double>();
 
-			for (int i = 0; i < horizont; i++)
+			for (int i = 0; i < length + horizont ; i++)
 			{
 				var res = .0;
 
 				for (int j = 0; j < parameters.Length; j++)
-					res += parameters[j] * Math.Pow(i + start, j);
+					res += parameters[j] * Math.Pow(i, j);
 
 				predictedSeries.Add(res);
 			}
@@ -169,15 +166,16 @@ namespace TimeSeriesPrediction
 		public static bool DickeyFullerTest(List<double> series)
 		{
 			var n = series.Count;
+
 			//Находим первую разность
 			var diffSeries = Differentiate(series);
 
-			// Находим среднее и дисперсию первой разности
-			var mean = diffSeries.Average();
-			var variance = diffSeries.Variance();
+			// Находим среднее и отклонение
+			var mean = series.Average();
+			var variance = series.Variance();
 
 			// Рассчитываем тестовую статистику
-			var testStatistic = mean / Math.Sqrt(variance / (n - 1));
+			var testStatistic = (diffSeries.Sum() - (n - 1) * mean) / (variance * Math.Sqrt(n - 1));
 
 			// Расчитываем критическое значение
 			double criticalValue;
@@ -186,10 +184,7 @@ namespace TimeSeriesPrediction
 			else
 					criticalValue = -3.43;
 
-			if (testStatistic < criticalValue)
-				return true; // Подтверждение нулевой гипотезы
-			else
-				return false; // опровержение нулевой гипотезы
+			return testStatistic < criticalValue;
 		}
 	}
 }

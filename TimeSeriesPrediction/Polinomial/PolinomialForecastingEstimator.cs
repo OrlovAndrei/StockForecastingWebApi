@@ -10,8 +10,8 @@
 			for (int n = 0; n < 10; n++)
 			{
 				var values = series.GetValues();
-				var parameters = Forecasting.Mls(series.GetValues(), n);
-				var predictedSeries = Forecasting.Polynomial(parameters, 0);
+				var parameters = Forecasting.Mls(values, n);
+				var predictedSeries = Forecasting.Polynomial(parameters, 0, values.Count);
 				var rss = Forecasting.Rss(values, predictedSeries);
 				var aic = Forecasting.Aic(n, rss, values.Count);
 
