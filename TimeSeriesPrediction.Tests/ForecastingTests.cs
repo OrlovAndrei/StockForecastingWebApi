@@ -1,6 +1,6 @@
 namespace TimeSeriesPrediction.Tests
 {
-	public class UnitTest1
+	public class ForecastingTests
 	{
 		[Fact]
 		public void Test1()

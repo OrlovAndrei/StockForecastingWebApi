@@ -13,7 +13,7 @@ namespace StockForecastingWebApi.Tests
 		public void ForecastersContainClassTest(string name, Type forecasterClass)
         {
             var provider = new ForecasterProvider();
-            Dictionary<string, IForecaster> forecasters = provider.Forecasters;
+            Dictionary<string, StockForecaster> forecasters = provider.Forecasters;
 
             Assert.True(forecasters[name].GetType() == forecasterClass);
         }
@@ -22,11 +22,11 @@ namespace StockForecastingWebApi.Tests
         public void ForecastersIsIForecasterTest()
         {
 			var provider = new ForecasterProvider();
-			Dictionary<string, IForecaster> forecasters = provider.Forecasters;
+			Dictionary<string, StockForecaster> forecasters = provider.Forecasters;
 
 			foreach (var forecaster in forecasters)
             {
-                Assert.True(forecaster.Value is IForecaster);
+                Assert.True(forecaster.Value is StockForecaster);
             }
         }
     }

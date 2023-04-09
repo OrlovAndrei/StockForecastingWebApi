@@ -5,7 +5,7 @@ using StockForecastingWebApi.Models;
 namespace StockForecastingWebApi.Services
 {
     [Forecaster("ssa")]
-    public class SSAForecaster : IForecaster
+    public class SSAForecaster : StockForecaster
     {
         public ForecastData Forecast(List<Stock> historicData)
         {

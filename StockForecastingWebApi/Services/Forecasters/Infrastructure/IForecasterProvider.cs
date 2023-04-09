@@ -4,6 +4,6 @@ namespace StockForecastingWebApi.Services
 {
     public interface IForecasterProvider
     {
-        Dictionary<string, IForecaster> Forecasters { get; }
+        Dictionary<string, StockForecaster> Forecasters { get; }
     }
 }
