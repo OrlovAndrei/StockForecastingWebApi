@@ -2,6 +2,8 @@
 {
     public class Stock
     {
+        public Stock() { }
+
         public Stock(DateTime stockDate, float closingPrice)
         {
             StockDate=stockDate;

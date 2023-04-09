@@ -142,6 +142,9 @@ namespace TimeSeriesPrediction
 
 		public static double Rss(List<double> list1, List<double> list2)
 		{
+			if (list1.Count != list2.Count)
+				throw new Exception("list1 and list2 have different lengths");
+
 			var err = .0;
 
 			for (int i = 0; i < list1.Count; i++)

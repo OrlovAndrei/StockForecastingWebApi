@@ -1,8 +1,7 @@
-﻿using System.Collections;
-
-namespace TimeSeriesPrediction
+﻿namespace TimeSeriesPrediction
 {
 	public class TimeSeriesTransformer<T>
+		where T : new()
 	{
 		private readonly string _datePropertyName;
 		private readonly string _valuePropertyName;
@@ -31,7 +30,18 @@ namespace TimeSeriesPrediction
 
 		public List<T> FromTimeSeries(TimeSeries series) 
 		{
-			return new List<T>();
+			var type = typeof(T);
+			var res = new List<T>();
+
+			foreach (Record item in series)
+			{
+				var elem = new T();
+				type.GetProperty(_datePropertyName).SetValue(elem, item.Date);
+				type.GetProperty(_valuePropertyName).SetValue(elem, item.Value);
+				res.Add(elem);
+			}
+
+			return res;
 		}
 	}
 }
