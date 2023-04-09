@@ -1,23 +1,15 @@
-﻿using System.Reflection;
+﻿using TimeSeriesPrediction;
 
 namespace StockForecastingWebApi.Services
 {
-    public class ForecasterProvider : IForecasterProvider
-    {
-        public Dictionary<string, StockForecaster> Forecasters { get => GetForecasters(); }
-
-        private Dictionary<string, StockForecaster> GetForecasters()
-        {
-            return Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(a => a.GetConstructor(Type.EmptyTypes) != null)
-                .Select(Activator.CreateInstance)
-                .OfType<StockForecaster>()
-                .ToDictionary(x => x
-                    .GetType()
-                    .GetCustomAttribute<ForecasterAttribute>()
-                    .Name);
-        }
-    }
+	public class ForecasterProvider : IForecasterProvider
+	{
+		public Dictionary<string, StockForecaster> Forecasters { get; } = new Dictionary<string, StockForecaster>
+		{
+			{"arima",      new StockForecaster(new ArimaForecastingEstimator()) },
+			{"es",         new StockForecaster(new EsForecastingEstimator()) },
+			{"polinomial", new StockForecaster(new PolinomialForecastingEstimator()) },
+			{"ssa",        new StockForecaster(new SsaForecastingEstimator()) }
+		};
+	}
 }
