@@ -7,6 +7,9 @@ namespace TimeSeriesPrediction
 	{
 		public static List<double> Differentiate(this List<double> series)
 		{
+			if (series.Count < 2)
+				throw new Exception("The series cannot be differentiated");
+
 			var diffSeries = new List<double>();
 
 			for (int i = 1; i < series.Count; i++)
@@ -27,9 +30,13 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Arima(int p, int d, int q, List<double> series, int horizont)
 		{
+			var l = p > q ? p : q;
+
+			if (series.Count < l + d)
+				throw new Exception($"The series is too short to predict the ARIMA model with parameters p={p}, d={d}, q={q}");
+
 			var diffSeries = new List<double>(series);
 			var remains = new Stack<double>();
-			var l = p > q ? p : q;
 
 			for (int i = 0; i < d; i++)
 				diffSeries = Differentiate(diffSeries);
@@ -50,11 +57,15 @@ namespace TimeSeriesPrediction
 
 		public static List<double> Arma(int p, int q, List<double> series, int horizont)
 		{
+			var l = p > q ? p : q;
+			if (series.Count < l)
+				throw new Exception($"The series is too short to predict the ARIMA model with parameters p={p}, q={q}");
+			
 			//коэффициенты расчитываются с помощью уравнения Юла — Уокера
 			var a = 1 / (double)p;
 			var b = 1 / (double)q;
 			//переделать!
-			var l = p > q ? p : q;
+
 			var predictedSeries = new List<double> { series[l] };
 
 			for (int i = l; i < series.Count + horizont; i++)
