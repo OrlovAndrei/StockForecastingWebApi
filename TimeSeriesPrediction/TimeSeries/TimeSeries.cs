@@ -41,6 +41,11 @@ namespace TimeSeriesPrediction
 			return series;
 		}
 
+		public List<Record> GetList()
+		{
+			return _series.ToList();
+		}
+
 		public double this[DateTime date]
 		{
 			get => _series.Find(s => s.Date == date).Value;

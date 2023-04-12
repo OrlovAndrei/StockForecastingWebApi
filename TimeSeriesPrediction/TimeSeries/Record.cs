@@ -1,6 +1,6 @@
 ﻿namespace TimeSeriesPrediction
 {
-	public struct Record
+	public class Record
 	{
 		public DateTime Date { get; }
 		public double Value { get; set; }
