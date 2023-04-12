@@ -4,7 +4,7 @@
 	{
 		public EsForecastingModel Fit(TimeSeries series)
 		{
-			var minAic = int.MaxValue;
+			var minAic = double.MaxValue;
 			EsForecastingModel bestModel = null;
 
 			for (int n = 0; n < 10; n++)
@@ -15,7 +15,11 @@
 				var aic = Forecasting.Aic(n, rss, values.Count);
 
 				if (aic < minAic)
+				{
+					minAic = aic;
 					bestModel = new EsForecastingModel(n);
+				}
+					
 			}
 
 			return bestModel;

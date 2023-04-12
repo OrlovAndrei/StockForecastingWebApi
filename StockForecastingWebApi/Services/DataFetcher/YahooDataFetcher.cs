@@ -13,7 +13,7 @@ namespace StockForecastingWebApi.Services
                 var historicalData = await Yahoo.GetHistoricalAsync(symbol, new DateTime(2010, 1, 1), DateTime.Now, Period.Daily);
                 foreach(var item in historicalData)
                 {
-                    stockData.Add(new Stock(item.DateTime, (float)item.Close));
+                    stockData.Add(new Stock(item.DateTime, (double)item.Close));
                 }
                 return stockData;
             }

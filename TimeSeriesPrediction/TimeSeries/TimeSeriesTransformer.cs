@@ -21,7 +21,7 @@
 			{
 				var date = (DateTime)type.GetProperty(_datePropertyName).GetValue(item);
 				var value = (double)type.GetProperty(_valuePropertyName).GetValue(item);
-				timeSeries.Add(new Record(date, value));
+				timeSeries.Add(new Record(date, (float)value));
 			}
 
 			timeSeries = timeSeries.OrderBy(s => s.Date).ToList();

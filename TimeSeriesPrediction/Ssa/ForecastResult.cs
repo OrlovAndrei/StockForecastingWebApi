@@ -2,6 +2,6 @@
 {
 	internal class ForecastResult
 	{
-		public double[] Forecast { get; set;}
+		public float[] Forecast { get; set;}
 	}
 }

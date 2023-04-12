@@ -19,8 +19,8 @@ namespace TimeSeriesPrediction
 				horizon: 10);
 
 			var forecaster = forecastingPipline.Fit(dataView);
-			var forecastingEngine = forecaster.CreateTimeSeriesEngine<List<Record>, ForecastResult>(mlContext);
-			var predictedSeries = forecastingEngine.Predict().Forecast.ToList();
+			var forecastingEngine = forecaster.CreateTimeSeriesEngine<Record, ForecastResult>(mlContext);
+			var predictedSeries = forecastingEngine.Predict().Forecast.Select(e => (double)e).ToList();
 
 			return GetForecast(series, predictedSeries, horizont);
 		}

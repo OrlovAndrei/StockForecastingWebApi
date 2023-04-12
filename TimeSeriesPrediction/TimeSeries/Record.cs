@@ -3,9 +3,9 @@
 	public class Record
 	{
 		public DateTime Date { get; }
-		public double Value { get; set; }
+		public float Value { get; set; }
 
-		public Record(DateTime date, double value)
+		public Record(DateTime date, float value)
 		{
 			Date = date;
 			Value = value;

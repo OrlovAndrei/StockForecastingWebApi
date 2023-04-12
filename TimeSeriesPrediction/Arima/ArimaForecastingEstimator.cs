@@ -4,9 +4,9 @@
 	{
 		public ArimaForecastingModel Fit(TimeSeries series)
 		{
-			int d = 5;
+			int d = 2;
 			var diffSeries = series.GetValues();
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 10; i++)
 			{				
 				if (Forecasting.DickeyFullerTest(diffSeries))
 				{
@@ -17,7 +17,7 @@
 				diffSeries = Forecasting.Differentiate(diffSeries);
 			}
 
-			var minAic = int.MaxValue;
+			var minAic = double.MaxValue;
 			ArimaForecastingModel bestModel = null;
 
 			for (int p = 0; p < 10; p++)
@@ -25,13 +25,17 @@
 				for (int q = 0; q < 10; q++)
 				{
 					var l = p > q ? p : q;
-					var values = series.GetValues().ToArray();
-					var predictedSeries = Forecasting.Arima(p, d, q, values.ToList(), 0);
-					var rss = Forecasting.Rss(values[(l+d)..^1].ToList(), predictedSeries);
-					var aic = Forecasting.Aic(p + d + q, rss, values.Length);
+					var values = series.GetValues();
+					var predictedSeries = Forecasting.Arima(p, d, q, values, 0);
+					var rss = Forecasting.Rss(values.Skip(l).ToList(), predictedSeries);
+					var aic = Forecasting.Aic(p + d + q, rss, values.Count);
 
 					if (aic < minAic)
+					{
+						minAic = aic;
 						bestModel = new ArimaForecastingModel(p, d, q);
+					}
+						
 				}
 			}
 			return bestModel;

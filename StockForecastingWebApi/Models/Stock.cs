@@ -4,13 +4,13 @@
     {
         public Stock() { }
 
-        public Stock(DateTime stockDate, float closingPrice)
+        public Stock(DateTime stockDate, double closingPrice)
         {
             StockDate=stockDate;
             ClosingPrice=closingPrice;
         }
 
         public DateTime StockDate { get; set; }
-        public float ClosingPrice { get; set; }
+        public double ClosingPrice { get; set; }
     }
 }

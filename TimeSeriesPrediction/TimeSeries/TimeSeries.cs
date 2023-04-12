@@ -29,7 +29,7 @@ namespace TimeSeriesPrediction
 		public void Add(double value)
 		{
 			var lastDate = _series.Count != 0 ? _series[^1].Date : _startDate;
-			_series.Add(new Record(lastDate + _interval, value));
+			_series.Add(new Record(lastDate + _interval, (float)value));
 		}
 
 		public List<double> GetValues()
@@ -53,7 +53,7 @@ namespace TimeSeriesPrediction
 			set
 			{
 				var index = _series.IndexOf(_series.Find(s => s.Date == date));
-				_series[index] = new Record(date, value);
+				_series[index] = new Record(date, (float)value);
 			}
 		}
 

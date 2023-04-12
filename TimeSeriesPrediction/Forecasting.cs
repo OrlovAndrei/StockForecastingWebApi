@@ -39,10 +39,10 @@ namespace TimeSeriesPrediction
 			var remains = new Stack<double>();
 
 			for (int i = 0; i < d; i++)
+			{
+				remains.Push(diffSeries[0]);
 				diffSeries = Differentiate(diffSeries);
-
-			for (int i = l; i < l + d; i++)
-				remains.Push(series[i]);
+			}
 
 			var predictedSeries = Arma(p, q, diffSeries, horizont);
 
@@ -95,7 +95,7 @@ namespace TimeSeriesPrediction
 				var ma = .0;
 				for (int j = 0; j < q; j++)
 				{
-					if (i - j - 1 < series.Count || i - j - 1 > l)
+					if (i - j - 1 < series.Count && i - j - 1 >= l)
 					{
 						var e = predictedSeries[^(1 + j)] - series[i - j - 1];
 						ma += b[j] * e;

@@ -26,9 +26,9 @@ namespace StockForecastingWebApi.Controllers
                 var forecast = _forecasterProvider.Forecasters[method].Forecast(historicData);
                 return historicData == null ? NotFound() : Ok(new {HistoricData=historicData, Forecast=forecast });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
