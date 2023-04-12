@@ -5,7 +5,7 @@ namespace StockForecastingWebApi.Services
 {
     public class StockForecaster
     {
-		private IForecastingEstimator<ForecastingModel> _estimator;
+		private readonly IForecastingEstimator<ForecastingModel> _estimator;
 
 		public StockForecaster(IForecastingEstimator<ForecastingModel> estimator)
 		{

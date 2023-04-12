@@ -8,7 +8,7 @@
 
 		public override TimeSeries Predict(int horizont, TimeSeries series)
 		{
-			var predictedSeries = Forecasting.Polynomial(Parameters, horizont);
+			var predictedSeries = Forecasting.Polynomial(Parameters, horizont, series.Count);
 
 			return GetForecast(series, predictedSeries, horizont);
 		}

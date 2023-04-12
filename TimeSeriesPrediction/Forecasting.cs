@@ -62,31 +62,43 @@ namespace TimeSeriesPrediction
 				throw new Exception($"The series is too short to predict the ARIMA model with parameters p={p}, q={q}");
 			
 			//коэффициенты расчитываются с помощью уравнения Юла — Уокера
-			var a = 1 / (double)p;
-			var b = 1 / (double)q;
-			//переделать!
+			var a = YuleWalker(series, p); //авторегрессия
 
-			var predictedSeries = new List<double> { series[l] };
+			var errors = new List<double>();
+			for (int i = p; i < series.Count; i++)
+			{
+				var ar = .0;
+				for (int j = 0; j < p; j++)
+				{
+					ar += a[j] * series[i - j - 1];
+				}
+
+				errors.Add(series[i] - ar);
+			}
+
+			var b = YuleWalker(errors, q);//скользящие среднее
+
+			var predictedSeries = new List<double>();
 
 			for (int i = l; i < series.Count + horizont; i++)
 			{
 				var ar = .0;
 				for (int j = 0; j < p; j++)
 				{
-					if (i - j < series.Count)
-						ar += a * series[i - j];
+					if (i - j - 1 < series.Count)
+						ar += a[j] * series[i - j - 1];
 
 					else
-						ar += a * predictedSeries[^(1 + j)];
+						ar += a[j] * predictedSeries[^(1 + j)];
 				}
 
 				var ma = .0;
 				for (int j = 0; j < q; j++)
 				{
-					if (i - j < series.Count || i - j >= l)
+					if (i - j - 1 < series.Count || i - j - 1 > l)
 					{
-						var e = predictedSeries[^(1 + j)] - series[i - j];
-						ma += b * e;
+						var e = predictedSeries[^(1 + j)] - series[i - j - 1];
+						ma += b[j] * e;
 					}
 				}
 
@@ -199,6 +211,33 @@ namespace TimeSeriesPrediction
 					criticalValue = -3.43;
 
 			return testStatistic < criticalValue;
+		}
+
+		public static double[] YuleWalker(List<double> series, int order)
+		{
+			var data = Vector<double>.Build.DenseOfArray(series.ToArray());
+
+			// Создаем матрицу системы уравнений
+			var matrix = Matrix<double>.Build.Dense(order, order);
+			for (int i = 0; i < order; i++)
+				for (int j = 0; j < order; j++)
+					matrix[i, j] = data.SubVector(order - i - 1, data.Count - order - 1)
+						.DotProduct(data.SubVector(order - j - 1, data.Count - order - 1));
+
+			// Создаем вектор правой части системы уравнений
+			var rightHandSide = Vector<double>.Build.Dense(order);
+			for (int i = 0; i < order; i++)
+				rightHandSide[i] = data.SubVector(order, data.Count - order - 1).DotProduct(data.SubVector(order - i - 1, data.Count - order - 1));
+
+			// Решаем систему уравнений
+			var coefficients = matrix.QR().Solve(rightHandSide);
+
+			// Создаем вектор коэффициентов модели авторегрессии
+			var arCoefficients = Vector<double>.Build.Dense(order);
+			for (int i = 0; i < order; i++)
+				arCoefficients[i] = coefficients[i];
+
+			return arCoefficients.ToArray();
 		}
 	}
 }
